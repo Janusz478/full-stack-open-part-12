@@ -11,6 +11,11 @@ router.get('/', async (_, res) => {
 
 /* POST todo to listing. */
 router.post('/', async (req, res) => {
+  redis.getAsync("added_todos").then(added_todos => {
+      if (added_todos === null) added_todos = 0
+      redis.setAsync("added_todos", Number(added_todos) + 1)
+    })
+  
   const todo = await Todo.create({
     text: req.body.text,
     done: false
@@ -30,7 +35,7 @@ const findByIdMiddleware = async (req, res, next) => {
 
 /* DELETE todo. */
 singleRouter.delete('/', async (req, res) => {
-  await req.todo.delete()  
+  await req.todo.delete()
   res.sendStatus(200);
 });
 
@@ -41,7 +46,7 @@ singleRouter.get('/', async (req, res) => {
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  const {text, done} = req.body
+  const { text, done } = req.body
   if (text) req.todo["text"] = text
   if (done) req.todo["done"] = done
   req.todo.save()
