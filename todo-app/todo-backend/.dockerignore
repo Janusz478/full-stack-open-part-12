@@ -1,4 +1,11 @@
 .dockerignore
 .gitignore
-node_modules
+
 Dockerfile
+dev.Dockerfile
+docker-compose.yml
+docker-compose.dev.yml
+
+node_modules
+mongo_data
+redis_data
