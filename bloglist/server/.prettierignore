@@ -3,3 +3,5 @@ node_modules
 server/build
 client/cypress
 README.md
+package.json
+package-lock.json

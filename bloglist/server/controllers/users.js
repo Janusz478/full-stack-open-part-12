@@ -1,7 +1,7 @@
 const usersRouter = require("express").Router();
 const User = require("../models/user");
 const Blog = require("../models/blog");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 usersRouter.get("/", async (request, response) => {
   const users = await User.find({}).populate("blogs", {
