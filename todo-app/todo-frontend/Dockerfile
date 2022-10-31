@@ -9,8 +9,14 @@ COPY . .
 ENV CI=true
 RUN npm run test
 
-FROM base AS dev
-COPY --from=test /usr/src/app /usr/src/app
-ENV PORT=3001
-ENV REACT_APP_BACKEND_URL=http://localhost:3000
-CMD [ "npm", "start" ]
+FROM base as build
+RUN npm ci --production
+COPY . .
+ENV REACT_APP_BACKEND_URL=api/
+RUN npm run build
+
+FROM node:18 AS prod
+WORKDIR /usr/src/app
+RUN npm install -g serve
+COPY --from=build /usr/src/app/build build
+CMD [ "serve", "build" ]
